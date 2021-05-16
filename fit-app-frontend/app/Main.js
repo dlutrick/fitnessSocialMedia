@@ -7,13 +7,21 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 Axios.defaults.baseURL = "http://localhost:8080";
 
 // My Components
+import Header from "./components/Header";
 import HomeGuest from "./components/HomeGuest";
+import Footer from "./components/Footer";
 
 function Main() {
   return (
-    <div>
-      <h1>Hello</h1>
-    </div>
+    <BrowserRouter>
+      <Header />
+      <Switch>
+        <Route path="/" exact>
+          <HomeGuest />
+        </Route>
+      </Switch>
+      <Footer />
+    </BrowserRouter>
   );
 }
 
