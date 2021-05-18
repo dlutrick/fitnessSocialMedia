@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
+import HeaderLoggedOut from "./HeaderLoggedOut";
+import HeaderLoggedIn from "./HeaderLoggedIn";
 
-function Header() {
-  let isLoggedIn = false;
+function Header(props) {
   return (
     <header className="header-bar bg-primary mb-3">
       <div className="container d-flex flex-column flex-md-row align-items-center p-3">
@@ -11,10 +12,10 @@ function Header() {
             <img src="../images/FitnessApp.png" alt="Logo for the website." />
           </Link>
         </h4>
-        {isLoggedIn ? (
-          <button className="btn btn-success">Logout</button>
+        {props.loggedIn ? (
+          <HeaderLoggedIn setLoggedIn={props.setLoggedIn} />
         ) : (
-          <button className="btn btn-success">Login</button>
+          <HeaderLoggedOut setLoggedIn={props.setLoggedIn} />
         )}
       </div>
     </header>

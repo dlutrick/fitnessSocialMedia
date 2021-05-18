@@ -6,7 +6,7 @@ dotenv.config();
 
 mongodb.connect(
   process.env.CONNECTIONSTRING,
-  { useNewUrlParser: true, useUnifiedTopology: true },
+  { useUnifiedTopology: true },
   (error, client) => {
     if (error) {
       console.log(error);

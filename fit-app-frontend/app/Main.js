@@ -9,15 +9,20 @@ Axios.defaults.baseURL = "http://localhost:8080";
 // My Components
 import Header from "./components/Header";
 import HomeGuest from "./components/HomeGuest";
+import Home from "./components/Home";
 import Footer from "./components/Footer";
 
 function Main() {
+  const [loggedIn, setLoggedIn] = useState(
+    Boolean(localStorage.getItem("fitnessAppToken"))
+  );
+
   return (
     <BrowserRouter>
-      <Header />
+      <Header loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
       <Switch>
         <Route path="/" exact>
-          <HomeGuest />
+          {loggedIn ? <Home /> : <HomeGuest />}
         </Route>
       </Switch>
       <Footer />

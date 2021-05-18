@@ -1,11 +1,15 @@
 // Required files
-const router = require("express").Router();
+const apiRouter = require("express").Router();
 const cors = require("cors");
+const userController = require("./controllers/userController");
 
-router.use(cors());
+apiRouter.use(cors());
 
-router.get("/", (req, res) => {
+apiRouter.get("/", (req, res) => {
   res.send("The server is working.");
 });
 
-module.exports = router;
+apiRouter.post("/register", userController.apiRegister);
+apiRouter.post("/login", userController.apiLogin);
+
+module.exports = apiRouter;
