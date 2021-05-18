@@ -14,7 +14,7 @@ function HeaderLoggedOut(props) {
       });
       if (response.data) {
         localStorage.setItem("fitnessAppToken", response.data.token);
-        localStorage.setItem("fitnessAppAppUsername", response.data.username);
+        localStorage.setItem("fitnessAppUsername", response.data.username);
         localStorage.setItem("fitnessAppAvatar", response.data.avatar);
         props.setLoggedIn(true);
       } else {
