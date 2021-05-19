@@ -5,8 +5,8 @@ function HeaderLoggedOut(props) {
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
 
-  async function handleSubmit(event) {
-    event.preventDefault();
+  async function handleSubmit(e) {
+    e.preventDefault();
     try {
       const response = await Axios.post("/login", {
         username,
