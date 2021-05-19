@@ -18,6 +18,7 @@ function CreatePost(props) {
         token: localStorage.getItem("fitnessAppToken"),
       });
       // Redirect to new post url
+      props.addFlashMessage("Congrats, you successfully added a post.");
       props.history.push(`/post/${response.data}`);
       console.log("Post successfully created.");
     } catch (e) {
