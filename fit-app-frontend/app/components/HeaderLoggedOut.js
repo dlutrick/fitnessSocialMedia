@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Axios from "axios";
+import DispatchContext from "../DispatchContext";
 
 function HeaderLoggedOut(props) {
+  const appDispatch = useContext(DispatchContext);
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
 
@@ -13,10 +15,7 @@ function HeaderLoggedOut(props) {
         password,
       });
       if (response.data) {
-        localStorage.setItem("fitnessAppToken", response.data.token);
-        localStorage.setItem("fitnessAppUsername", response.data.username);
-        localStorage.setItem("fitnessAppAvatar", response.data.avatar);
-        props.setLoggedIn(true);
+        appDispatch({ type: "login", data: response.data });
       } else {
         console.log("Incorrect username or password.");
       }

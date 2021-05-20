@@ -1,10 +1,14 @@
 // Required files
-import React, { useState } from "react";
+import React, { useState, useReducer, useEffect } from "react";
 import ReactDOM from "react-dom";
+import { useImmerReducer } from "use-immer";
 import Axios from "axios";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 
 Axios.defaults.baseURL = "http://localhost:8080";
+
+import StateContext from "./StateContext";
+import DispatchContext from "./DispatchContext";
 
 // My Components
 import Header from "./components/Header";
@@ -16,32 +20,66 @@ import Footer from "./components/Footer";
 import FlashMessages from "./components/FlashMessages";
 
 function Main() {
-  const [loggedIn, setLoggedIn] = useState(
-    Boolean(localStorage.getItem("fitnessAppToken"))
-  );
-  const [flashMessages, setFlashMessages] = useState([]);
+  const initialState = {
+    loggedIn: Boolean(localStorage.getItem("fitnessAppToken")),
+    flashMessages: [],
+    user: {
+      token: localStorage.getItem("fitnessAppToken"),
+      username: localStorage.getItem("fitnessAppUsername"),
+      avatar: localStorage.getItem("fitnessAppAvatar"),
+    },
+  };
 
-  function addFlashMessage(msg) {
-    setFlashMessages((prev) => prev.concat(msg));
+  function ourReducer(draft, action) {
+    switch (action.type) {
+      case "login":
+        draft.loggedIn = true;
+        draft.user = action.data;
+        return;
+      case "logout":
+        draft.loggedIn = false;
+        return;
+      case "flashMessage":
+        draft.flashMessages.push(action.value);
+        return;
+    }
   }
 
+  const [state, dispatch] = useImmerReducer(ourReducer, initialState);
+
+  useEffect(() => {
+    if (state.loggedIn) {
+      localStorage.setItem("fitnessAppToken", state.user.token);
+      localStorage.setItem("fitnessAppUsername", state.user.username);
+      localStorage.setItem("fitnessAppAvatar", state.user.avatar);
+    } else {
+      localStorage.removeItem("fitnessAppToken");
+      localStorage.removeItem("fitnessAppUsername");
+      localStorage.removeItem("fitnessAppAvatar");
+    }
+  }, [state.loggedIn]);
+
   return (
-    <BrowserRouter>
-      <FlashMessages messages={flashMessages} />
-      <Header loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
-      <Switch>
-        <Route path="/" exact>
-          {loggedIn ? <Home /> : <HomeGuest />}
-        </Route>
-        <Route path="/post/:id">
-          <ViewSinglePost />
-        </Route>
-        <Route path="/create-post">
-          <CreatePost addFlashMessage={addFlashMessage} />
-        </Route>
-      </Switch>
-      <Footer />
-    </BrowserRouter>
+    <StateContext.Provider value={state}>
+      <DispatchContext.Provider value={dispatch}>
+        <BrowserRouter>
+          <FlashMessages messages={state.flashMessages} />
+          <Header />
+          <Switch>
+            <Route path="/" exact>
+              {state.loggedIn ? <Home /> : <HomeGuest />}
+            </Route>
+            <Route path="/post/:id">
+              <ViewSinglePost />
+            </Route>
+            <Route path="/create-post">
+              <CreatePost />
+            </Route>
+          </Switch>
+          <Footer />
+        </BrowserRouter>
+      </DispatchContext.Provider>
+    </StateContext.Provider>
   );
 }
 
