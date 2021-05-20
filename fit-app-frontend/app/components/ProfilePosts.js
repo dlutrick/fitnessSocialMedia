@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
 function ProfilePosts() {
   const { username } = useParams();
@@ -31,15 +31,15 @@ function ProfilePosts() {
         }/${date.getDate()}/${date.getFullYear()}`;
 
         return (
-          <a
+          <Link
             key={post._id}
-            href="#"
+            to={`/post/${post._id}`}
             className="list-group-item list-group-item-action"
           >
             <img className="avatar-tiny" src={post.author.avatar} />{" "}
             <strong>{post.title}</strong>{" "}
             <span className="text-muted small">{formattedDate}</span>
-          </a>
+          </Link>
         );
       })}
     </div>
