@@ -65,16 +65,16 @@ apiRouter.get(
   userController.profileFollowing
 );
 
-// // follow routes
-// apiRouter.post(
-//   "/addFollow/:username",
-//   userController.apiMustBeLoggedIn,
-//   followController.apiAddFollow
-// );
-// apiRouter.post(
-//   "/removeFollow/:username",
-//   userController.apiMustBeLoggedIn,
-//   followController.apiRemoveFollow
-// );
+// follow routes
+apiRouter.post(
+  "/addFollow/:username",
+  userController.apiMustBeLoggedIn,
+  followController.apiAddFollow
+);
+apiRouter.post(
+  "/removeFollow/:username",
+  userController.apiMustBeLoggedIn,
+  followController.apiRemoveFollow
+);
 
 module.exports = apiRouter;
